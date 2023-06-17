@@ -1,38 +1,29 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/orders/src",
+  "sourceRoot": "apps/rabbit-provider/src",
   "monorepo": true,
-  "root": "apps/orders",
+  "root": "apps/rabbit-provider",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/orders/tsconfig.app.json"
+    "tsConfigPath": "apps/rabbit-provider/tsconfig.app.json"
   },
   "projects": {
-    "orders": {
+    "rabbit-provider": {
       "type": "application",
-      "root": "apps/orders",
+      "root": "apps/rabbit-provider",
       "entryFile": "main",
-      "sourceRoot": "apps/orders/src",
+      "sourceRoot": "apps/rabbit-provider/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/orders/tsconfig.app.json"
+        "tsConfigPath": "apps/rabbit-provider/tsconfig.app.json"
       }
     },
-    "billing": {
+    "rabbit-consumer": {
       "type": "application",
-      "root": "apps/billing",
+      "root": "apps/rabbit-consumer",
       "entryFile": "main",
-      "sourceRoot": "apps/billing/src",
+      "sourceRoot": "apps/rabbit-consumer/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/billing/tsconfig.app.json"
-      }
-    },
-    "auth": {
-      "type": "application",
-      "root": "apps/auth",
-      "entryFile": "main",
-      "sourceRoot": "apps/auth/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/auth/tsconfig.app.json"
+        "tsConfigPath": "apps/rabbit-consumer/tsconfig.app.json"
       }
     },
     "common": {
