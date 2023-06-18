@@ -7,6 +7,19 @@ services:
     command: npm run start:dev rabbit-provider
     env_file:
       - ./apps/rabbit-provider/.env
+    depends_on:
+      - postgres
+      - cache
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=pricing_database
+      - DB_USERNAME=admin
+      - DB_PASSWORD=123
+      - DB_SYNCHRONIZE=false
+      - REDIS_HOST= cache
+      - REDIS_PORT= 6379
+      
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -27,4 +40,29 @@ services:
     image: rabbitmq
     ports:
       - '5672:5672'
-
+      - '15672:15672'
+  postgres:
+    container_name: pricing_database
+    image: postgres:14.7-alpine
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=pricing_database
+    ports:
+     - "5432:5432"
+    volumes:
+      - ./home/swap_data/:/var/lib/postgresql/data
+  cache:
+    container_name: pricing_cache
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    environment:
+      - REDIS_HOST=cache
+      - REDIS_PORT=6379
+    command: redis-server --save 20 1 --loglevel warning 
+    volumes: 
+      - /home/kyc_data-data/cache/:/data
+    
