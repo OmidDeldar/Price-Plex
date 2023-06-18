@@ -37,7 +37,7 @@ export class RabbitProviderService {
       throw err;
     }
   }
-  async sendPriceConvert(request: PriceSendToAllRQ) {
+  async sendPriceConvert(request: ConvertPriceDto) {
     try {
       // for(let i = 0; i<= 100;i++)
       await lastValueFrom(
@@ -51,7 +51,7 @@ export class RabbitProviderService {
     }
   }
 
-  async sendPriceOtc(request: ConvertPriceDto) {
+  async sendPriceOtc(request: PriceSendToAllRQ) {
     try {
       // for(let i = 0; i<= 100;i++)
       await lastValueFrom(
