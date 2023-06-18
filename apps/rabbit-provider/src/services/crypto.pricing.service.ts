@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 import { Cron, CronExpression, Interval } from "@nestjs/schedule";
 import { GlobalService } from "./global.service";
 import { RedisOriginService } from "@app/common";
@@ -20,6 +20,7 @@ var WebSocketClient = require('websocket').w3cwebsocket;
 @Injectable()
 export class CryptoPricingService implements OnModuleInit {
   cryptoManual
+  private readonly logger = new Logger(CryptoPricingService.name);
   constructor(private redisService: RedisOriginService,
     private globalService: GlobalService,
     // private priceService: PriceService,
@@ -33,6 +34,7 @@ export class CryptoPricingService implements OnModuleInit {
 
   async onModuleInit() {
     const listCrypto = await this.globalService.cryptoList()
+    this.logger.log('listCrypto =>',listCrypto)
     this.cryptoList = this.cryptoList.concat(listCrypto)
     await this.insertAllPriceCrypto();
   }

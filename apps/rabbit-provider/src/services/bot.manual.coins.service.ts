@@ -21,7 +21,7 @@ export class BotManualCoinsService implements OnModuleInit{
         }
     async onModuleInit() {
         const res:CryptoEnt[]=await this.globalService.cryptoList()
-        const manualCoins=res.filter(item=>item.type_get_price==TypePriceCryptoEnum.MANUAL)
+        const manualCoins=res.filter(item=>item?.type_get_price==TypePriceCryptoEnum.MANUAL)
         this.cryptoLists=this.cryptoLists.concat(res)
         for (let index = 0; index < manualCoins.length ;index++) {
             const getKeysOfRedis=await this.redisService.multiGetKeys(`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}${manualCoins[index].symbol_crypto.toLowerCase()}*`)

@@ -33,6 +33,8 @@ services:
     command: npm run start:dev rabbit-consumer
     env_file:
       - ./apps/rabbit-consumer/.env
+    ports:
+     - '42625:42625'
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -51,8 +53,7 @@ services:
       - POSTGRES_DB=pricing_database
     ports:
      - "5432:5432"
-    volumes:
-      - ./home/swap_data/:/var/lib/postgresql/data
+    
   cache:
     container_name: pricing_cache
     image: redis:6.2-alpine
@@ -63,6 +64,5 @@ services:
       - REDIS_HOST=cache
       - REDIS_PORT=6379
     command: redis-server --save 20 1 --loglevel warning 
-    volumes: 
-      - /home/kyc_data-data/cache/:/data
+    
     

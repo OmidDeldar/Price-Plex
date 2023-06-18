@@ -4,6 +4,7 @@ import * as Joi from 'joi';
 import { RabbitConsumerController } from './rabbit-consumer.controller';
 import { RabbitConsumerService } from './rabbit-consumer.service';
 import { ConfigModule } from '@nestjs/config';
+import { PriceGateway } from './socket/pricing.gateway';
 
 @Module({
   imports: [
@@ -17,6 +18,9 @@ import { ConfigModule } from '@nestjs/config';
     RmqModule,
   ],
   controllers: [RabbitConsumerController],
-  providers: [RabbitConsumerService],
+  providers: [
+    RabbitConsumerService,
+    PriceGateway
+  ],
 })
 export class RabbitConsumerModule {}

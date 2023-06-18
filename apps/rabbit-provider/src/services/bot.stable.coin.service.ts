@@ -16,7 +16,7 @@ export class BotStableCoinService implements OnModuleInit{
         private cryptoPricingService:CryptoPricingService,){}
     async onModuleInit() {
         const result=await this.globalService.cryptoList()
-        const stableCoins=result.filter(item=>item.stable_coin==true)
+        const stableCoins=result.filter(item=>item?.stable_coin==true)
         this.cryptoEntLists=this.cryptoEntLists.concat(stableCoins)
     }
     
