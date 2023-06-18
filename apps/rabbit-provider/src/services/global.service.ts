@@ -11,7 +11,7 @@ export class GlobalService {
 
    async cryptoList(): Promise<CryptoEnt[]> {
       try {
-         const cryptoListReq = await axios.get("https://api-de.novintex.com/api/v1/crypto/list/cryptos")
+         const cryptoListReq = await axios.get("http://192.168.35.45:3800/api/v1/crypto/list/cryptos")
          const responseAxios: ResponseCrypto = cryptoListReq.data
          const cryptoList: CryptoEnt[] = responseAxios.data
          return cryptoList
