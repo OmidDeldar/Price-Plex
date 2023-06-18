@@ -48,9 +48,9 @@ import { PriceService } from './services/price.service';
   ],
   controllers: [OrdersController],
   providers: [
+    GlobalService,
     RabbitProviderService,
     PriceService,
-    GlobalService,
     CryptoPricingService,
     BotStableCoinService,
     BotManualCoinsService,
