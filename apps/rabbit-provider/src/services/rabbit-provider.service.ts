@@ -41,7 +41,7 @@ export class RabbitProviderService {
     try {
       // for(let i = 0; i<= 100;i++)
       await lastValueFrom(
-        this.billingClient.emit('price_convert_sented', {
+        this.billingClient.emit('order_created', {
           request,
         }),
       );
@@ -55,7 +55,7 @@ export class RabbitProviderService {
     try {
       // for(let i = 0; i<= 100;i++)
       await lastValueFrom(
-        this.billingClient.emit('price_otc_sented', {
+        this.billingClient.emit('order_created', {
           request,
         }),
       );
