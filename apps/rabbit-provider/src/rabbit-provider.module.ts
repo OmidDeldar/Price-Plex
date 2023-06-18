@@ -43,7 +43,7 @@ import { PriceService } from './services/price.service';
     // }),
     TypeOrmModule.forRootAsync(OrmConfigModulePostgres),
     TypeOrmModule.forFeature([PriceEnt]),
-    OriginRedisModule.forRoot('cache', 6379),
+    OriginRedisModule.forRoot('192.168.35.45', 6379),
     ScheduleModule.forRoot()
   ],
   controllers: [OrdersController],

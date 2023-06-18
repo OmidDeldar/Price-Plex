@@ -8,8 +8,8 @@ export class OriginRedisModule{
         const redisProvider:Provider={
             provide:"REDIS_CONNECTION_ORIGIN",
             useFactory:async ()=>{
-                // const client=createClient({url:`redis://${host}:${port}`})
-                const client=createClient({url:`redis://cache:6379`})
+                const client=createClient({url:`redis://${host}:${port}`})
+                // const client=createClient({url:`redis://cache:6379`})
                 await client.connect()
 
                 return client
