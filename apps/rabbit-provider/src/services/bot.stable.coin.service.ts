@@ -26,7 +26,9 @@ export class BotStableCoinService implements OnModuleInit{
     for(let count = 0 ; count < lenStableCoins ; count++) {
       const row = this.cryptoEntLists[count]
       const  pattern =`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${row.symbol_crypto.toLowerCase()}*`
+      console.log('row =>',row)
       const resultKeys =await this.redisService.multiGetKeys(pattern)
+      console.log('resultKey =>',resultKeys)
       const lenKeys = resultKeys.length
       for (let countPattern =0 ;  countPattern < lenKeys;countPattern++ ) {
         const rowKeys = resultKeys[countPattern]

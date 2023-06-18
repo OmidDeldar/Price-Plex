@@ -41,6 +41,7 @@ export class BotIrrService implements OnModuleInit{
   async calcPriceIRR() {
     try {
       const getKey=<IrrPriceDto>await this.redisService.getKey(this.PREFIX_PRICE_IRR)
+      console.log('getKeyIrr =>',getKey)
       if(parseInt(getKey.price)!==0)
       this.defaultPrice=parseInt(getKey.price)
 
