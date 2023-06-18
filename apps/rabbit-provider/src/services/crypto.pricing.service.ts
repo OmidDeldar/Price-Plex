@@ -34,7 +34,7 @@ export class CryptoPricingService implements OnModuleInit {
 
   async onModuleInit() {
     const listCrypto = await this.globalService.cryptoList()
-    this.logger.log('listCrypto =>',listCrypto)
+    
     this.cryptoList = this.cryptoList.concat(listCrypto)
     await this.insertAllPriceCrypto();
   }
@@ -50,6 +50,7 @@ export class CryptoPricingService implements OnModuleInit {
       let finalBinanceChannelFour = []
       const pattern = `*${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*`
       const findALlKeys = await this.redisService.multiGetKeys(pattern)
+      this.logger.log('redisKeys =>',findALlKeys)
       for (const key of findALlKeys) {
         const findedExchangeDto = <RedisExchangeDto>await this.redisService.getKey(key)
         const fromCrypto = this.cryptoList.find(item => item.symbol_crypto.toLowerCase() == findedExchangeDto.from_crypto.toLowerCase() && item.type_get_price == TypePriceCryptoEnum.REPOSITORY)

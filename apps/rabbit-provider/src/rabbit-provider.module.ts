@@ -50,11 +50,11 @@ import { PriceService } from './services/price.service';
   providers: [
     GlobalService,
     RabbitProviderService,
-    PriceService,
-    CryptoPricingService,
-    BotStableCoinService,
     BotManualCoinsService,
     BotIrrService,
+    CryptoPricingService,
+    BotStableCoinService,
+    PriceService,
     PriceRepo 
   ],
 })
