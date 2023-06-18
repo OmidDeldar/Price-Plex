@@ -16,7 +16,20 @@ export class RabbitConsumerController {
   }
 
   @EventPattern('order_created')
-  async handleOrderCreated(@Payload() data: any, @Ctx() context: RmqContext) {
+  async getOrder(@Payload() data: any, @Ctx() context: RmqContext) {
+    this.rabbitConsumerService.bill(data);
+    // this.rmqService.ack(context);
+  }
+
+
+  @EventPattern('price_convert_sented')
+  async sentPriceConvert(@Payload() data: any, @Ctx() context: RmqContext) {
+    this.rabbitConsumerService.bill(data);
+    // this.rmqService.ack(context);
+  }
+
+  @EventPattern('price_otc_sented')
+  async sentPriceOtc(@Payload() data: any, @Ctx() context: RmqContext) {
     this.rabbitConsumerService.bill(data);
     // this.rmqService.ack(context);
   }
