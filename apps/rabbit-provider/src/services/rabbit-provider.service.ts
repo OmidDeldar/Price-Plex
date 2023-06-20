@@ -26,6 +26,7 @@ export class RabbitProviderService {
 
   async createOrder(createOrder: CreateOrderRequest){
     try {
+      console.log('req => ',createOrder)
       for(let i = 0; i<= 100;i++)
       await lastValueFrom(
         this.billingClient.emit('order_created', {
@@ -39,6 +40,7 @@ export class RabbitProviderService {
   }
   async sendPriceConvert(request: ConvertPriceDto) {
     try {
+      console.log('req convert=> ',request)
       // for(let i = 0; i<= 100;i++)
       await lastValueFrom(
         this.billingClient.emit('order_created', {
@@ -53,6 +55,7 @@ export class RabbitProviderService {
 
   async sendPriceOtc(request: PriceSendToAllRQ) {
     try {
+      console.log('req otc=> ',request)
       // for(let i = 0; i<= 100;i++)
       await lastValueFrom(
         this.billingClient.emit('order_created', {
