@@ -22,7 +22,7 @@ services:
     env_file:
       - ./apps/rabbit-consumer/.env
     ports:
-     - '42625:42625'
+     - '42627:42627'
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
