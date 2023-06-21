@@ -48,6 +48,7 @@ export class CryptoPricingService implements OnModuleInit{
        let finalBinanceChannelTwo=[]
        let finalBinanceChannelThree=[]
        let finalBinanceChannelFour=[]
+       console.log('getPriceCrypto')
        const pattern=`*${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*`
       //  const findALlKeys=await this.redisService.multiGetKeys(pattern)
       const findALlKeys = await this.redisPlusService.getKeys(pattern);
