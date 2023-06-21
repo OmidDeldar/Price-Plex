@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
-import { Cron } from "@nestjs/schedule";
+import { Cron, CronExpression } from "@nestjs/schedule";
 import { GlobalService } from "./global.service";
 import { RedisOriginService } from "@app/common";
 import { CryptoEnt } from "../dto/crypto.entity";
@@ -22,7 +22,7 @@ export class BotStableCoinService implements OnModuleInit{
         this.cryptoEntLists=this.cryptoEntLists.concat(stableCoins)
     }
     
-    @Cron('* * * * * *')
+    @Cron(CronExpression.EVERY_SECOND)
   async runChangeStableCoins() {
     const lenStableCoins = this.cryptoEntLists.length
     for(let count = 0 ; count < lenStableCoins ; count++) {

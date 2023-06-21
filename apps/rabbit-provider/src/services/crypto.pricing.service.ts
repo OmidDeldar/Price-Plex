@@ -90,8 +90,10 @@ export class CryptoPricingService implements OnModuleInit{
        finalBinanceChannelFour=[...new Set(finalBinanceChannelFour)]
 
     const channelOne=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelOne.join("/")}`)
+    console.log('channelOne =>',channelOne)
       channelOne.onmessage=async (e)=>{
       const parsedJson=JSON.parse(e.data)
+      console.log('parsed Data=>',parsedJson)
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
@@ -112,8 +114,10 @@ export class CryptoPricingService implements OnModuleInit{
       }
 
       const channelTwo=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelTwo.join("/")}`)
+      console.log('channelTwo =>',channelTwo)
       channelTwo.onmessage=async (e)=>{
       const parsedJson=JSON.parse(e.data)
+      console.log('parsedData =>',parsedJson)
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
@@ -134,8 +138,10 @@ export class CryptoPricingService implements OnModuleInit{
       }
 
       const channelThree=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelThree.join("/")}`)
+      console.log('channelThree =>',channelThree)
       channelThree.onmessage=async (e)=>{
       const parsedJson=JSON.parse(e.data)
+      console.log('parsedData =>',parsedJson)
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
@@ -156,8 +162,10 @@ export class CryptoPricingService implements OnModuleInit{
       }
 
       const channelFour=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelFour.join("/")}`)
+      console.log('channelFour =>',channelFour)
       channelFour.onmessage=async (e)=>{
       const parsedJson=JSON.parse(e.data)
+      console.log('parsedData =>',parsedJson)
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
@@ -186,6 +194,7 @@ export class CryptoPricingService implements OnModuleInit{
           {
             try {
               const cryptosData = await this.getCryptosData(redisPrice.from_crypto,redisPrice.to_crypto)
+              console.log('cryptoData =>',cryptosData)
               let diffrence = (cryptosData != null ? cryptosData.diffrence : '-');
               const priceSendToAllRQ: PriceSendToAllRQ = {
                 from: redisPrice.from_crypto,
