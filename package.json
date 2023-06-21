@@ -37,7 +37,7 @@
     "joi": "^17.9.2",
     "js-big-decimal": "^1.4.1",
     "pg": "^8.11.0",
-    "redis": "^4.6.7",
+    "redis": "^4.5.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.16",
