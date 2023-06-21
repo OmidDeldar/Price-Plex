@@ -28,9 +28,9 @@ export class CryptoPricingService implements OnModuleInit{
       private priceService: PriceService,
       private redisPlusService: RedisPlusService,
       ){
-        setTimeout(()=>{
+        // setTimeout(()=>{
           this.getPriceCryptoRepository()
-        },5000)
+        // },5000)
     }
 
   async onModuleInit() {
@@ -43,6 +43,7 @@ export class CryptoPricingService implements OnModuleInit{
     cryptoList:CryptoEnt[]=[]
     async getPriceCryptoRepository() {
       try {
+        console.log('getPriceCrypto')
        const subscribe = "usdt@kline_1s"
        let finalBinanceChannelOne=[]
        let finalBinanceChannelTwo=[]
