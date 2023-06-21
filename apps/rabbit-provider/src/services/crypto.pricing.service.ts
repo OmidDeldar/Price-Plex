@@ -14,6 +14,7 @@ import { GlobalService } from "./global.service";
 import { PriceService } from "./price.service";
 import { PublicFunc } from "../public.func";
 import { CreatePriceDto } from "../dto/create-price.dto";
+import { RedisPlusService } from "@app/common/redis/services/redis-plus.service";
 const bigDecimal=require("js-big-decimal") 
 var WebSocketClient = require('websocket').w3cwebsocket;
 
@@ -24,7 +25,9 @@ export class CryptoPricingService implements OnModuleInit{
     constructor(private redisService:RedisOriginService,
       private rabbitProviderService: RabbitProviderService,
       private globalService:GlobalService,
-      private priceService: PriceService){
+      private priceService: PriceService,
+      private redisPlusService: RedisPlusService,
+      ){
         setTimeout(()=>{
           this.getPriceCryptoRepository()
         },5000)
@@ -46,7 +49,8 @@ export class CryptoPricingService implements OnModuleInit{
        let finalBinanceChannelThree=[]
        let finalBinanceChannelFour=[]
        const pattern=`*${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*`
-       const findALlKeys=await this.redisService.multiGetKeys(pattern)
+      //  const findALlKeys=await this.redisService.multiGetKeys(pattern)
+      const findALlKeys = await this.redisPlusService.getKeys(pattern);
        this.logger.log('redisExchange =>',findALlKeys)
        for (const key of findALlKeys) {
         const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(key)
@@ -89,7 +93,8 @@ export class CryptoPricingService implements OnModuleInit{
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
-         const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
+        //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
+        const getExchangeOfRedis = await this.redisPlusService.getKeys(pattern);
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -110,7 +115,8 @@ export class CryptoPricingService implements OnModuleInit{
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
-         const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
+        //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
+         const getExchangeOfRedis=await this.redisPlusService.getKeys(pattern)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -131,7 +137,8 @@ export class CryptoPricingService implements OnModuleInit{
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
-         const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
+        //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
+        const getExchangeOfRedis=await this.redisPlusService.getKeys(pattern)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -152,7 +159,8 @@ export class CryptoPricingService implements OnModuleInit{
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
-         const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
+        //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
+        const getExchangeOfRedis=await this.redisPlusService.getKeys(pattern)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -310,7 +318,8 @@ export class CryptoPricingService implements OnModuleInit{
             try {
               const subscribe = "usdt@kline_1s"
               const pattern=`*${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*`
-              const findALlKeys=await this.redisService.multiGetKeys(pattern)
+              // const findALlKeys=await this.redisService.multiGetKeys(pattern)
+              const findALlKeys=await this.redisPlusService.getKeys(pattern)
               for (const key of findALlKeys) {
                 const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(key)
                 if (findedExchangeDto.from_price != '0' && findedExchangeDto.to_price != '0') {

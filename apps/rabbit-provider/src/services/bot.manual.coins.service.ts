@@ -7,6 +7,7 @@ import { RedisExchangeDto } from "../dto/redis.exchange.dto";
 import { ExchangeTypeEnum } from "../enums/exchange.type.enum";
 import { TypePriceCryptoEnum } from "../enums/type.price.column";
 import { CryptoPricingService } from "./crypto.pricing.service";
+import { RedisPlusService } from "@app/common/redis/services/redis-plus.service";
 const axios=require("axios")
 
 @Injectable()
@@ -17,14 +18,18 @@ export class BotManualCoinsService implements OnModuleInit{
     PREFIX_PRICE_EXCHANGE_CRYPTO="prefix_price_exchange_crypto_"
     constructor(private redisService:RedisOriginService,
         private globalService:GlobalService,
-        private cryptoPricingService:CryptoPricingService){
+        private cryptoPricingService:CryptoPricingService,
+        private redisPlusService: RedisPlusService
+        
+        ){
         }
     async onModuleInit() {
         const res:CryptoEnt[]=await this.globalService.cryptoList()
         const manualCoins=res.filter(item=>item?.type_get_price==TypePriceCryptoEnum.MANUAL)
         this.cryptoLists=this.cryptoLists.concat(res)
         for (let index = 0; index < manualCoins.length ;index++) {
-            const getKeysOfRedis=await this.redisService.multiGetKeys(`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}${manualCoins[index].symbol_crypto.toLowerCase()}*`)
+            // const getKeysOfRedis=await this.redisService.multiGetKeys(`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}${manualCoins[index].symbol_crypto.toLowerCase()}*`)
+            const getKeysOfRedis=await this.redisPlusService.getKeys(`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}${manualCoins[index].symbol_crypto.toLowerCase()}*`)
             this.cryptoManual=this.cryptoManual.concat(getKeysOfRedis)
         }
     }

@@ -4,12 +4,15 @@ import { GlobalService } from "./global.service";
 import { RedisOriginService } from "@app/common";
 import { IrrPriceDto } from "../dto/irr.price.dto";
 import { RedisExchangeDto } from "../dto/redis.exchange.dto";
+import { RedisPlusService } from "@app/common/redis/services/redis-plus.service";
 const bigDecimal=require( "js-big-decimal")
 
 @Injectable()
 export class BotIrrService implements OnModuleInit{
     constructor(private redisService:RedisOriginService,
-      private globalService:GlobalService)
+      private globalService:GlobalService,
+      private redisPlusService: RedisPlusService
+      )
     {}
  async onModuleInit() {
     await this.firstTime()
@@ -37,7 +40,7 @@ export class BotIrrService implements OnModuleInit{
     }
 
     
-    @Interval(1000)
+  @Interval(1000)
   async calcPriceIRR() {
     try {
       const getKey=<IrrPriceDto>await this.redisService.getKey(this.PREFIX_PRICE_IRR)
@@ -46,7 +49,8 @@ export class BotIrrService implements OnModuleInit{
       this.defaultPrice=parseInt(getKey.price)
 
       const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*irr`
-    const getKeys=await this.redisService.multiGetKeys(pattern)
+    // const getKeys=await this.redisService.multiGetKeys(pattern)
+    const getKeys=await this.redisPlusService.getKeys(pattern)
     for (let count = 0 ; count < getKeys.length ; count++) {
       const row = getKeys[count]
       const keyIRR: RedisExchangeDto=<RedisExchangeDto>await this.redisService.getKey(row)

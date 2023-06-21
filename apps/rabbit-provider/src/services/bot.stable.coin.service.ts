@@ -6,6 +6,7 @@ import { CryptoEnt } from "../dto/crypto.entity";
 import { RedisExchangeDto } from "../dto/redis.exchange.dto";
 import { ExchangeTypeEnum } from "../enums/exchange.type.enum";
 import { CryptoPricingService } from "./crypto.pricing.service";
+import { RedisPlusService } from "@app/common/redis/services/redis-plus.service";
 
 @Injectable()
 export class BotStableCoinService implements OnModuleInit{
@@ -13,7 +14,8 @@ export class BotStableCoinService implements OnModuleInit{
     PREFIX_PRICE_EXCHANGE_CRYPTO="prefix_price_exchange_crypto_"
     constructor(private redisService:RedisOriginService,
         private globalService:GlobalService,
-        private cryptoPricingService:CryptoPricingService,){}
+        private cryptoPricingService:CryptoPricingService,
+        private redisPlusService: RedisPlusService){}
     async onModuleInit() {
         const result=await this.globalService.cryptoList()
         const stableCoins=result.filter(item=>item?.stable_coin==true)
@@ -27,7 +29,8 @@ export class BotStableCoinService implements OnModuleInit{
       const row = this.cryptoEntLists[count]
       const  pattern =`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${row.symbol_crypto.toLowerCase()}*`
       console.log('row =>',row)
-      const resultKeys =await this.redisService.multiGetKeys(pattern)
+      // const resultKeys =await this.redisService.multiGetKeys(pattern)
+      const resultKeys =await this.redisPlusService.getKeys(pattern)
       console.log('resultKey =>',resultKeys)
       const lenKeys = resultKeys.length
       for (let countPattern =0 ;  countPattern < lenKeys;countPattern++ ) {

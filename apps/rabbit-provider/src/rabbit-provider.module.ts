@@ -16,6 +16,7 @@ import { CryptoPricingService } from './services/crypto.pricing.service';
 import { GlobalService } from './services/global.service';
 import { PriceRepo } from './repositories/price.repository';
 import { PriceService } from './services/price.service';
+import { RedisModule } from '@app/common/redis/redis.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { PriceService } from './services/price.service';
     TypeOrmModule.forRootAsync(OrmConfigModulePostgres),
     TypeOrmModule.forFeature([PriceEnt]),
     OriginRedisModule.forRoot('192.168.35.45', 6379),
+    RedisModule.forRoot('192.168.35.45', 6379),
     ScheduleModule.forRoot()
   ],
   controllers: [OrdersController],
