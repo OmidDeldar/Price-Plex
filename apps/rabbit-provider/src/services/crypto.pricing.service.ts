@@ -27,7 +27,7 @@ export class CryptoPricingService implements OnModuleInit{
       private priceService: PriceService){
         setTimeout(()=>{
           this.getPriceCryptoRepository()
-        },30000)
+        },5000)
     }
 
   async onModuleInit() {
