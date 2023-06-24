@@ -28,10 +28,10 @@ export class CryptoPricingService implements OnModuleInit{
       private priceService: PriceService,
       private redisPlusService: RedisPlusService,
       ){
-        // setTimeout(()=>{
-          new Promise(resolve => setTimeout(resolve,5000)); 
+        setTimeout(()=>{
+          // new Promise(resolve => setTimeout(resolve,5000)); 
           this.getPriceCryptoRepository()
-        // },5000)
+        },5000)
     }
 
   async onModuleInit() {
