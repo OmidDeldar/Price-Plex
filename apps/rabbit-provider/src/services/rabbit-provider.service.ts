@@ -47,7 +47,7 @@ export class RabbitProviderService {
           request,
         }),
       );
-      return true;
+      // return true;
     } catch (err) {
       throw err;
     }
@@ -62,7 +62,7 @@ export class RabbitProviderService {
           request,
         }),
       );
-      return true;
+      // return true;
     } catch (err) {
       throw err;
     }

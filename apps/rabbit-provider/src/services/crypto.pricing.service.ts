@@ -59,7 +59,8 @@ export class CryptoPricingService implements OnModuleInit{
         const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(key)
          const fromCrypto=this.cryptoList.find(item=>item.symbol_crypto.toLowerCase()==findedExchangeDto.from_crypto.toLowerCase() && item.type_get_price==TypePriceCryptoEnum.REPOSITORY)
         const toCrypto=this.cryptoList.find(item=>item.symbol_crypto.toLowerCase()==findedExchangeDto.to_crypto.toLowerCase() && item.type_get_price==TypePriceCryptoEnum.REPOSITORY)
-   
+        console.log('fromCrypto =>',fromCrypto)
+        console.log('toCrypto =>',toCrypto)
          if (fromCrypto) {
            if (fromCrypto.crypto_socket == PriceStatusEnum.CHANNEL_1)
              finalBinanceChannelOne.push(`${fromCrypto.symbol_crypto.toLowerCase()}${subscribe}`)
@@ -89,7 +90,7 @@ export class CryptoPricingService implements OnModuleInit{
        finalBinanceChannelTwo=[...new Set(finalBinanceChannelTwo)]
        finalBinanceChannelThree=[...new Set(finalBinanceChannelThree)]
        finalBinanceChannelFour=[...new Set(finalBinanceChannelFour)]
-
+    console.log('finalBinanceChannelOne =>',finalBinanceChannelOne)
     const channelOne=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelOne.join("/")}`)
     // console.log('channelOne =>',channelOne)
       channelOne.onmessage=async (e)=>{
@@ -100,6 +101,7 @@ export class CryptoPricingService implements OnModuleInit{
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
         //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
         const getExchangeOfRedis = await this.redisPlusService.getKeys(pattern);
+        console.log('getExchangeOfRedis=>',getExchangeOfRedis)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -113,7 +115,7 @@ export class CryptoPricingService implements OnModuleInit{
            await this.redisService.setKey(exchangeOfRedis,JSON.stringify(findedExchangeDto),999999)
          }
       }
-
+      console.log('finalBinanceChannelTwo =>',finalBinanceChannelTwo)
       const channelTwo=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelTwo.join("/")}`)
       // console.log('channelTwo =>',channelTwo)
       channelTwo.onmessage=async (e)=>{
@@ -124,6 +126,7 @@ export class CryptoPricingService implements OnModuleInit{
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
         //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
          const getExchangeOfRedis=await this.redisPlusService.getKeys(pattern)
+         console.log('getExchangeOfRedis=>',getExchangeOfRedis)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -137,7 +140,7 @@ export class CryptoPricingService implements OnModuleInit{
            await this.redisService.setKey(exchangeOfRedis,JSON.stringify(findedExchangeDto),999999)
          }
       }
-
+      console.log('finalBinanceChannelThree =>',finalBinanceChannelThree)
       const channelThree=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelThree.join("/")}`)
       // console.log('channelThree =>',channelThree)
       channelThree.onmessage=async (e)=>{
@@ -148,6 +151,7 @@ export class CryptoPricingService implements OnModuleInit{
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
         //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
         const getExchangeOfRedis=await this.redisPlusService.getKeys(pattern)
+        console.log('getExchangeOfRedis=>',getExchangeOfRedis)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -161,7 +165,7 @@ export class CryptoPricingService implements OnModuleInit{
            await this.redisService.setKey(exchangeOfRedis,JSON.stringify(findedExchangeDto),999999)
          }
       }
-
+      console.log('finalBinanceChannelFour =>',finalBinanceChannelFour)
       const channelFour=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelFour.join("/")}`)
       // console.log('channelFour =>',channelFour)
       channelFour.onmessage=async (e)=>{
@@ -172,6 +176,7 @@ export class CryptoPricingService implements OnModuleInit{
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
         //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
         const getExchangeOfRedis=await this.redisPlusService.getKeys(pattern)
+        console.log('getExchangeOfRedis=>',getExchangeOfRedis)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
