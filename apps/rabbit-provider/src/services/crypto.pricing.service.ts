@@ -36,6 +36,7 @@ export class CryptoPricingService implements OnModuleInit{
 
   async onModuleInit() {
     const listCrypto= await this.globalService.cryptoList()
+    console.log('listCrypto =>',listCrypto)
        this.cryptoList=this.cryptoList.concat(listCrypto)
        await this.insertAllPriceCrypto();
   }
