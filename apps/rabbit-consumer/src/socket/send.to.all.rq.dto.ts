@@ -7,5 +7,5 @@ export class PriceSendToAllRQ {
   from_decimal: string
   to_decimal: string
   channel?: string
-  // diffrence?: string
+  diffrence?: string
 }

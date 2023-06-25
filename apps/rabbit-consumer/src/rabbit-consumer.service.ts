@@ -18,11 +18,12 @@ export class RabbitConsumerService {
     // const parsedData = JSON.parse(data);
     this.logger.log('Billing...', data.request);
     // this.logger.log('name', parsedData.createOrder.name);
+    let parsedData = JSON.parse(data?.request)
     if(data?.request?.to_crypto){
-      this.priceGateway.getPriceConvert(data);
+      this.priceGateway.getPriceConvert(parsedData);
     }
     else if(data?.request?.to){
-      this.priceGateway.getPriceOtc(data);
+      this.priceGateway.getPriceOtc(parsedData);
     }
   }
 }
