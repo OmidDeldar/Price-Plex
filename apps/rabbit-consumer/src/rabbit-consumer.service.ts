@@ -15,10 +15,7 @@ export class RabbitConsumerService {
   
 
   bill(data: any) {
-    // const parsedData = JSON.parse(data);
-    this.logger.log('Billing...', data.request);
-    // this.logger.log('name', parsedData.createOrder.name);
-    // let parsedData = JSON.parse(data?.request)
+    // this.logger.log('Billing...', data.request);
     if(data?.request?.to_crypto){
       this.priceGateway.getPriceConvert(data?.request);
     }

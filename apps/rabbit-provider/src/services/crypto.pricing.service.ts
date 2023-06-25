@@ -36,7 +36,7 @@ export class CryptoPricingService implements OnModuleInit{
 
   async onModuleInit() {
     const listCrypto= await this.globalService.cryptoList()
-    console.log('listCrypto =>',listCrypto)
+    // console.log('listCrypto =>',listCrypto)
        this.cryptoList=this.cryptoList.concat(listCrypto)
        await this.insertAllPriceCrypto();
        await new Promise(resolve => setTimeout(resolve, 5000));
@@ -47,23 +47,23 @@ export class CryptoPricingService implements OnModuleInit{
     cryptoList:CryptoEnt[]=[]
     async getPriceCryptoRepository() {
       try {
-        console.log('getPriceCrypto')
+        // console.log('getPriceCrypto')
        const subscribe = "usdt@kline_1s"
        let finalBinanceChannelOne=[]
        let finalBinanceChannelTwo=[]
        let finalBinanceChannelThree=[]
        let finalBinanceChannelFour=[]
-       console.log('getPriceCrypto')
+      //  console.log('getPriceCrypto')
        const pattern=`*${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*`
       //  const findALlKeys=await this.redisService.multiGetKeys(pattern)
       const findALlKeys = await this.redisPlusService.getKeys(pattern);
-       this.logger.log('redisExchange =>',findALlKeys)
+      //  this.logger.log('redisExchange =>',findALlKeys)
        for (const key of findALlKeys) {
         const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(key)
          const fromCrypto=this.cryptoList.find(item=>item.symbol_crypto.toLowerCase()==findedExchangeDto.from_crypto.toLowerCase() && item.type_get_price==TypePriceCryptoEnum.REPOSITORY)
         const toCrypto=this.cryptoList.find(item=>item.symbol_crypto.toLowerCase()==findedExchangeDto.to_crypto.toLowerCase() && item.type_get_price==TypePriceCryptoEnum.REPOSITORY)
-        console.log('fromCrypto =>',fromCrypto)
-        console.log('toCrypto =>',toCrypto)
+        // console.log('fromCrypto =>',fromCrypto)
+        // console.log('toCrypto =>',toCrypto)
          if (fromCrypto) {
            if (fromCrypto.crypto_socket == PriceStatusEnum.CHANNEL_1)
              finalBinanceChannelOne.push(`${fromCrypto.symbol_crypto.toLowerCase()}${subscribe}`)
@@ -93,18 +93,18 @@ export class CryptoPricingService implements OnModuleInit{
        finalBinanceChannelTwo=[...new Set(finalBinanceChannelTwo)]
        finalBinanceChannelThree=[...new Set(finalBinanceChannelThree)]
        finalBinanceChannelFour=[...new Set(finalBinanceChannelFour)]
-    console.log('finalBinanceChannelOne =>',finalBinanceChannelOne)
+    // console.log('finalBinanceChannelOne =>',finalBinanceChannelOne)
     const channelOne=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelOne.join("/")}`)
     // console.log('channelOne =>',channelOne)
       channelOne.onmessage=async (e)=>{
       const parsedJson=JSON.parse(e.data)
-      console.log('parsed Data=>',parsedJson)
+      // console.log('parsed Data=>',parsedJson)
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
         //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
         const getExchangeOfRedis = await this.redisPlusService.getKeys(pattern);
-        console.log('getExchangeOfRedis=>',getExchangeOfRedis)
+        // console.log('getExchangeOfRedis=>',getExchangeOfRedis)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -118,18 +118,18 @@ export class CryptoPricingService implements OnModuleInit{
            await this.redisService.setKey(exchangeOfRedis,JSON.stringify(findedExchangeDto),999999)
          }
       }
-      console.log('finalBinanceChannelTwo =>',finalBinanceChannelTwo)
+      // console.log('finalBinanceChannelTwo =>',finalBinanceChannelTwo)
       const channelTwo=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelTwo.join("/")}`)
       // console.log('channelTwo =>',channelTwo)
       channelTwo.onmessage=async (e)=>{
       const parsedJson=JSON.parse(e.data)
-      console.log('parsedData =>',parsedJson)
+      // console.log('parsedData =>',parsedJson)
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
         //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
          const getExchangeOfRedis=await this.redisPlusService.getKeys(pattern)
-         console.log('getExchangeOfRedis=>',getExchangeOfRedis)
+        //  console.log('getExchangeOfRedis=>',getExchangeOfRedis)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -143,18 +143,18 @@ export class CryptoPricingService implements OnModuleInit{
            await this.redisService.setKey(exchangeOfRedis,JSON.stringify(findedExchangeDto),999999)
          }
       }
-      console.log('finalBinanceChannelThree =>',finalBinanceChannelThree)
+      // console.log('finalBinanceChannelThree =>',finalBinanceChannelThree)
       const channelThree=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelThree.join("/")}`)
       // console.log('channelThree =>',channelThree)
       channelThree.onmessage=async (e)=>{
       const parsedJson=JSON.parse(e.data)
-      console.log('parsedData =>',parsedJson)
+      // console.log('parsedData =>',parsedJson)
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
         //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
         const getExchangeOfRedis=await this.redisPlusService.getKeys(pattern)
-        console.log('getExchangeOfRedis=>',getExchangeOfRedis)
+        // console.log('getExchangeOfRedis=>',getExchangeOfRedis)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -168,18 +168,18 @@ export class CryptoPricingService implements OnModuleInit{
            await this.redisService.setKey(exchangeOfRedis,JSON.stringify(findedExchangeDto),999999)
          }
       }
-      console.log('finalBinanceChannelFour =>',finalBinanceChannelFour)
+      // console.log('finalBinanceChannelFour =>',finalBinanceChannelFour)
       const channelFour=new WebSocketClient(`wss://stream.binance.com:9443/stream?streams=${finalBinanceChannelFour.join("/")}`)
       // console.log('channelFour =>',channelFour)
       channelFour.onmessage=async (e)=>{
       const parsedJson=JSON.parse(e.data)
-      console.log('parsedData =>',parsedJson)
+      // console.log('parsedData =>',parsedJson)
       const tradeBinanceDto : CandleBinanceDto =  new CandleBinanceDto(parsedJson)
          const symbolSocket = tradeBinanceDto.symbol_event.substring(0 , tradeBinanceDto.symbol_event.length-4).toLowerCase()
          const pattern=`${this.PREFIX_PRICE_EXCHANGE_CRYPTO}*${symbolSocket}*`
         //  const getExchangeOfRedis=await this.redisService.multiGetKeys(pattern)
         const getExchangeOfRedis=await this.redisPlusService.getKeys(pattern)
-        console.log('getExchangeOfRedis=>',getExchangeOfRedis)
+        // console.log('getExchangeOfRedis=>',getExchangeOfRedis)
          for (const exchangeOfRedis of getExchangeOfRedis) {
            const findedExchangeDto=<RedisExchangeDto>await this.redisService.getKey(exchangeOfRedis)
            findedExchangeDto.from_crypto==symbolSocket?findedExchangeDto.from_price=tradeBinanceDto.price:findedExchangeDto.to_price=tradeBinanceDto.price
@@ -203,7 +203,7 @@ export class CryptoPricingService implements OnModuleInit{
           {
             try {
               const cryptosData = await this.getCryptosData(redisPrice.from_crypto,redisPrice.to_crypto)
-              console.log('cryptoData =>',cryptosData)
+              // console.log('cryptoData =>',cryptosData)
               let diffrence = (cryptosData != null ? cryptosData.diffrence : '-');
               const priceSendToAllRQ: PriceSendToAllRQ = {
                 from: redisPrice.from_crypto,
@@ -240,7 +240,7 @@ export class CryptoPricingService implements OnModuleInit{
                     priceSendToAllRQ.sale_to_exchange=sale
                   }
                   // console.log('priceSendToAll =>>',priceSendToAllRQ)
-                  this.logger.log('price otc  =>',priceSendToAllRQ)
+                  // this.logger.log('price otc  =>',priceSendToAllRQ)
                   switch (priceSendToAllRQ.channel) {
                     case PriceStatusEnum.CHANNEL_1:
                       await this.rabbitProviderService.sendPriceOtc(priceSendToAllRQ)
@@ -308,7 +308,7 @@ export class CryptoPricingService implements OnModuleInit{
                   to_crypto: redisExchangeDto.to_crypto,
                   channel: redisExchangeDto.channel
                 }
-                this.logger.log('price convert  =>',convertPriceDto)
+                // this.logger.log('price convert  =>',convertPriceDto)
                 switch (convertPriceDto.channel) {
                     case PriceStatusEnum.CHANNEL_1:
                       await this.rabbitProviderService.sendPriceConvert(convertPriceDto)
